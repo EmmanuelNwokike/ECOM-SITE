@@ -1,0 +1,57 @@
+%% Class Diagram
+classDiagram
+    class Customer {
+        +String username
+        +String password
+        +String name
+        +String phone
+        +String email
+        +String postalAddress
+        +register()
+        +login()
+        +cancelOrder()
+    }
+
+    class Item {
+        +String itemID
+        +String itemName
+        +String picture
+        +Float price
+        +getDetails()
+    }
+
+    class ShoppingCart {
+        +String cartID
+        +List<Item> items
+        +Float totalPrice
+        +addItem(item, quantity)
+        +removeItem(item)
+        +calculateTotal(): Float
+    }
+
+    class Payment {
+        +String cardholderName
+        +String cardNumber
+        +Date expirationDate
+        +String securityCode
+        +String postalAddress
+        +processPayment(): boolean
+        +validateCard(): boolean
+    }
+
+    class Order {
+        +String orderNumber
+        +String customerName
+        +List<Item> itemList
+        +Float totalPrice
+        +String postalAddress
+        +String status
+        +generateOrder()
+        +cancelOrder()
+    }
+
+    Customer "1" --> "1" ShoppingCart : manages
+    Customer "1" --> "0..*" Order : places
+    ShoppingCart "1" --> "1..*" Item : contains
+    Order "1" --> "1..*" Item : consists of
+    Order "1" --> "1" Payment : uses
