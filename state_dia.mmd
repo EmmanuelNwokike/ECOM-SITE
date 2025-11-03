@@ -1,0 +1,9 @@
+%% State Diagram - Order Life Cycle
+stateDiagram-v2
+    [*] --> Pending Payment : Order initiated
+    Pending Payment --> Placed (Confirmed) : Payment successful
+    Placed (Confirmed) --> Shipped/Delivered : Item is sent/received
+    Placed (Confirmed) --> Cancelled : Customer/Store cancels
+    Pending Payment --> Cancelled : Customer cancels before payment
+    Shipped/Delivered --> [*]
+    Cancelled --> [*]
