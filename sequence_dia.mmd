@@ -1,0 +1,27 @@
+%% Sequence Diagram - Checkout Use Case
+sequenceDiagram
+    actor Customer
+    participant AppInterface as App (UI)
+    participant ShoppingCart as Cart Object
+    participant PaymentGateway as Payment System
+    participant OrderSystem as Order Object
+
+    Customer->>AppInterface: Clicks "Checkout"
+    AppInterface->>ShoppingCart: displayItems()
+    ShoppingCart-->>AppInterface: Return Item List & Total
+    AppInterface->>Customer: Display Cart for Review/Confirmation
+
+    Customer->>AppInterface: Clicks "Confirm Order"
+    AppInterface->>Customer: Prompt for Payment/Address Info
+    Customer->>AppInterface: Submit Payment & Address Details
+    AppInterface->>PaymentGateway: validateAndProcess(CardDetails, Address)
+
+    alt Payment Successful
+        PaymentGateway-->>AppInterface: Return Success Status
+        AppInterface->>OrderSystem: createOrder(Customer, CartItems, Total)
+        OrderSystem-->>AppInterface: Return Order Number
+        AppInterface->>Customer: Display Order Confirmation
+    else Payment Fails
+        PaymentGateway-->>AppInterface: Return Failure Status
+        AppInterface->>Customer: Display Payment Error Message
+    end
