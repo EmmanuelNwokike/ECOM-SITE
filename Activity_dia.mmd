@@ -1,34 +1,28 @@
-%% Checkout and Order Completion Flow
----
-title: Checkout and Order Completion Flow
----
-activityDiagram
-    start
-    :Customer selects Checkout;
-    :Display Shopping Cart;
-    if (Customer Reviews Cart?) then (Needs Changes)
-        :Customer Adds/Removes Items;
-        -> :Display Shopping Cart;
-    else (Confirmed)
-        :Customer Confirms Order Details;
-        :Prompt for Payment Information;
-        :Customer Enters Credit Card Details & Postal Address;
-        :Validate Payment Information;
-        if (Payment Successful?) then (Yes)
-            :Process Payment;
-            :Generate Order Record (Order Number, Items, Price, etc.);
-            :Send Order Confirmation;
-            :Order Placed;
-            stop
-        else (No)
-            :Display Payment Error;
-            if (Customer Tries Again?) then (Yes)
-                -> :Prompt for Payment Information;
-            else (No)
-                :Cancel Checkout;
-                stop
-            end
-        end
-    end
+flowchart TD
+    %% Checkout and Order Completion Flow
+    A([Start]) --> B[Customer selects Checkout]
+    B --> C[Display Shopping Cart]
+    
+    C --> D{Customer Reviews Cart?}
+    D -->|Needs Changes| E[Customer Adds/Removes Items]
+    E --> C
+    D -->|Confirmed| F[Customer Confirms Order Details]
+    
+    F --> G[Prompt for Payment Information]
+    G --> H[Customer Enters Credit Card Details & Postal Address]
+    H --> I[Validate Payment Information]
+    
+    I --> J{Payment Successful?}
+    J -->|Yes| K[Process Payment]
+    K --> L[Generate Order Record<br/>(Order Number, Items, Price, etc.)]
+    L --> M[Send Order Confirmation]
+    M --> N([Order Placed])
+    N --> O([Stop])
+    
+    J -->|No| P[Display Payment Error]
+    P --> Q{Customer Tries Again?}
+    Q -->|Yes| G
+    Q -->|No| R[Cancel Checkout]
+    R --> S([Stop])
 
 
