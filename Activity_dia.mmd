@@ -1,29 +1,34 @@
-%% Activity Diagram - Checkout and Order Completion Flow
+%% Checkout and Order Completion Flow
+---
+title: Checkout and Order Completion Flow
+---
 activityDiagram
     start
     :Customer selects Checkout;
     :Display Shopping Cart;
-    if (Customer Reviews Cart) then (Needs Changes)
-      :Customer Adds/Removes Items;
-      ->Return to Cart Display;
+    if (Customer Reviews Cart?) then (Needs Changes)
+        :Customer Adds/Removes Items;
+        -> :Display Shopping Cart;
     else (Confirmed)
-      :Customer Confirms Order Details;
-      :Prompt for Payment Information;
-      :Customer Enters Credit Card Details & Postal Address;
-      :Validate Payment Information;
-      if (Payment Successful) then (Yes)
-        :Process Payment;
-        :Generate Order Record (Order Number, Items, Price, etc.);
-        :Send Order Confirmation;
-        :Order Placed;
-        stop
-      else (No)
-        :Display Payment Error;
-        if (Customer Tries Again) then (Yes)
-          ->Prompt for Payment Information;
+        :Customer Confirms Order Details;
+        :Prompt for Payment Information;
+        :Customer Enters Credit Card Details & Postal Address;
+        :Validate Payment Information;
+        if (Payment Successful?) then (Yes)
+            :Process Payment;
+            :Generate Order Record (Order Number, Items, Price, etc.);
+            :Send Order Confirmation;
+            :Order Placed;
+            stop
         else (No)
-          :Cancel Checkout;
-          stop
+            :Display Payment Error;
+            if (Customer Tries Again?) then (Yes)
+                -> :Prompt for Payment Information;
+            else (No)
+                :Cancel Checkout;
+                stop
+            end
         end
-      end
     end
+
+
