@@ -1,5 +1,4 @@
-%% E-Commerce Application — Activity Diagram (Mermaid .mmd)
-%% Paste into a Mermaid renderer (Mermaid Live Editor, VS Code, GitHub, etc.)
+%% E-Commerce Application — Activity Diagram (GitHub-safe Mermaid .mmd)
 
 flowchart TD
   %% Start
@@ -7,57 +6,51 @@ flowchart TD
 
   %% Registration / Login
   start --> authChoice{Have account?}
-  authChoice -- No --> register[/"Register: enter name, phone, email,\n postal address, username & password"/]
+  authChoice -- No --> register[Register: enter name, phone, email, postal address, username & password]
   register --> regSuccess{Registration successful?}
-  regSuccess -- Yes --> loggedIn[/"Logged in (session created)"/]
-  regSuccess -- No --> registerFail[/"Show errors -> retry"/]
+  regSuccess -- Yes --> loggedIn[Logged in (session created)]
+  regSuccess -- No --> registerFail[Show errors and retry]
   registerFail --> register
 
-  authChoice -- Yes --> login[/"Login: username & password"/]
+  authChoice -- Yes --> login[Login: username & password]
   login --> loginSuccess{Credentials valid?}
   loginSuccess -- Yes --> loggedIn
-  loginSuccess -- No --> loginFail[/"Show error -> retry"/]
+  loginSuccess -- No --> loginFail[Show error and retry]
   loginFail --> login
 
   %% Browsing and Cart
-  loggedIn --> browse[/Browse items (view name, picture, price)/]
-  browse --> viewItem["View item details"]
-  viewItem --> addCart{"Add to cart?"}
-  addCart -- Yes --> addItem[/"Add item to Shopping Cart"/]
+  loggedIn --> browse[Browse items (view name, picture, price)]
+  browse --> viewItem[View item details]
+  viewItem --> addCart{Add to cart?}
+  addCart -- Yes --> addItem[Add item to Shopping Cart]
   addCart -- No --> browse
   addItem --> cartChoice{Continue shopping or Checkout?}
   cartChoice -- Continue --> browse
-  cartChoice -- Checkout --> reviewCart[/"Review Cart: list items,\n update qty, remove items"/]
+  cartChoice -- Checkout --> reviewCart[Review Cart: list items, update qty, remove items]
 
   %% Option to cancel before payment
-  reviewCart --> preCancel{"Cancel order now?"}
-  preCancel -- Yes --> cancelledByCustomer1[/"Order cancelled by Customer\n (no payment taken)"/] --> end((End))
-  preCancel -- No --> proceedPayment{"Proceed to Payment?"}
+  reviewCart --> preCancel{Cancel order now?}
+  preCancel -- Yes --> cancelledByCustomer1[Order cancelled by Customer (no payment taken)] --> end((End))
+  preCancel -- No --> proceedPayment{Proceed to Payment?}
   proceedPayment -- No --> browse
-  proceedPayment -- Yes --> enterPayment[/"Enter payment details:\n cardholder name, card number,\n expiry, CVV, postal address"/]
+  proceedPayment -- Yes --> enterPayment[Enter payment details: card name, number, expiry, CVV, postal address]
 
   %% Payment & Order creation
-  enterPayment --> paymentProcess{Payment valid/authorized?}
-  paymentProcess -- No --> paymentFail[/"Payment failed -> show error -> retry or cancel"/]
+  enterPayment --> paymentProcess{Payment authorized?}
+  paymentProcess -- No --> paymentFail[Payment failed → retry or cancel]
   paymentFail --> enterPayment
-  paymentProcess -- Yes --> createOrder[/"Create Order:\n generate order number,\n record customer name, items,\n total price, postal address"/]
-  createOrder --> orderComplete[/"Order completed -> confirmation\n displayed/sent to customer"/]
+  paymentProcess -- Yes --> createOrder[Create Order: generate number, record name, items, total, address]
+  createOrder --> orderComplete[Order completed and confirmation sent]
 
-  %% Post-order flows: delivery / store/customer cancellation
-  orderComplete --> monitorOrder["Order in Fulfillment / Delivery"]
-  monitorOrder --> cancelDecision{"Cancel order requested?"}
-  cancelDecision -- CustomerRequested --> cancelledByCustomer2[/"Order cancelled by Customer\n (refund process if paid)"/] --> end
-  cancelDecision -- StoreRequested --> cancelledByStore[/"Order cancelled by Store\n (notify customer, refund if needed)"/] --> end
-  cancelDecision -- No --> orderDelivered[/"Order delivered -> Close order"/] --> end
+  %% Post-order flows
+  orderComplete --> monitorOrder[Order in Fulfillment / Delivery]
+  monitorOrder --> cancelDecision{Cancel order requested?}
+  cancelDecision -- Customer --> cancelledByCustomer2[Order cancelled by Customer (refund if paid)] --> end
+  cancelDecision -- Store --> cancelledByStore[Order cancelled by Store (notify customer, refund if needed)] --> end
+  cancelDecision -- No --> orderDelivered[Order delivered → Close order] --> end
 
-  %% Alternate cancellation path immediately after order creation (fast store cancel)
-  createOrder --> storeCancelCheck{"Store cancels immediately?"}
+  %% Alternate early store cancel
+  createOrder --> storeCancelCheck{Store cancels immediately?}
   storeCancelCheck -- Yes --> cancelledByStore
   storeCancelCheck -- No --> orderComplete
 
-  %% End node
-  end((End))
-
-  %% Styling (optional - keeps nodes easier to read)
-  classDef actions fill:#f9f9f9,stroke:#333,stroke-width:1px;
-  class register,login,loggedIn,browse,viewItem,addItem,reviewCart,enterPayment,createOrder,orderComplete,monitorOrder,orderDelivered actions;
