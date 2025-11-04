@@ -1,56 +1,50 @@
-%% E-Commerce Application — Activity Diagram (GitHub-safe Mermaid .mmd)
+%% E-Commerce Application - Activity Diagram (GitHub compatible)
 
 flowchart TD
-  %% Start
-  start((Start))
+  A((Start))
 
-  %% Registration / Login
-  start --> authChoice{Have account?}
-  authChoice -- No --> register[Register: enter name, phone, email, postal address, username & password]
-  register --> regSuccess{Registration successful?}
-  regSuccess -- Yes --> loggedIn[Logged in (session created)]
-  regSuccess -- No --> registerFail[Show errors and retry]
-  registerFail --> register
+  %% Registration or Login
+  A --> B{Have account}
+  B -- No --> C[Register with name, phone, email, address, username, password]
+  C --> D{Registration successful}
+  D -- Yes --> E[Login successful]
+  D -- No --> C
 
-  authChoice -- Yes --> login[Login: username & password]
-  login --> loginSuccess{Credentials valid?}
-  loginSuccess -- Yes --> loggedIn
-  loginSuccess -- No --> loginFail[Show error and retry]
-  loginFail --> login
+  B -- Yes --> F[Enter username and password]
+  F --> G{Credentials valid}
+  G -- Yes --> E
+  G -- No --> F
 
   %% Browsing and Cart
-  loggedIn --> browse[Browse items (view name, picture, price)]
-  browse --> viewItem[View item details]
-  viewItem --> addCart{Add to cart?}
-  addCart -- Yes --> addItem[Add item to Shopping Cart]
-  addCart -- No --> browse
-  addItem --> cartChoice{Continue shopping or Checkout?}
-  cartChoice -- Continue --> browse
-  cartChoice -- Checkout --> reviewCart[Review Cart: list items, update qty, remove items]
+  E --> H[Browse items list]
+  H --> I[View item details]
+  I --> J{Add to cart}
+  J -- Yes --> K[Add item to cart]
+  J -- No --> H
+  K --> L{Continue or Checkout}
+  L -- Continue --> H
+  L -- Checkout --> M[Review cart items]
 
-  %% Option to cancel before payment
-  reviewCart --> preCancel{Cancel order now?}
-  preCancel -- Yes --> cancelledByCustomer1[Order cancelled by Customer (no payment taken)] --> end((End))
-  preCancel -- No --> proceedPayment{Proceed to Payment?}
-  proceedPayment -- No --> browse
-  proceedPayment -- Yes --> enterPayment[Enter payment details: card name, number, expiry, CVV, postal address]
+  %% Cancel or Payment
+  M --> N{Cancel order}
+  N -- Yes --> O[Order cancelled by customer] --> Z((End))
+  N -- No --> P{Proceed to payment}
+  P -- No --> H
+  P -- Yes --> Q[Enter card info and address]
 
-  %% Payment & Order creation
-  enterPayment --> paymentProcess{Payment authorized?}
-  paymentProcess -- No --> paymentFail[Payment failed → retry or cancel]
-  paymentFail --> enterPayment
-  paymentProcess -- Yes --> createOrder[Create Order: generate number, record name, items, total, address]
-  createOrder --> orderComplete[Order completed and confirmation sent]
+  %% Payment and Order
+  Q --> R{Payment authorized}
+  R -- No --> Q
+  R -- Yes --> S[Create order with number, items, total, address]
+  S --> T[Order confirmation sent]
+  T --> U[Order in fulfillment]
 
-  %% Post-order flows
-  orderComplete --> monitorOrder[Order in Fulfillment / Delivery]
-  monitorOrder --> cancelDecision{Cancel order requested?}
-  cancelDecision -- Customer --> cancelledByCustomer2[Order cancelled by Customer (refund if paid)] --> end
-  cancelDecision -- Store --> cancelledByStore[Order cancelled by Store (notify customer, refund if needed)] --> end
-  cancelDecision -- No --> orderDelivered[Order delivered → Close order] --> end
+  %% Cancellation or Delivery
+  U --> V{Cancel order requested}
+  V -- Customer --> W[Cancelled by customer] --> Z
+  V -- Store --> X[Cancelled by store] --> Z
+  V -- No --> Y[Order delivered and closed] --> Z
 
-  %% Alternate early store cancel
-  createOrder --> storeCancelCheck{Store cancels immediately?}
-  storeCancelCheck -- Yes --> cancelledByStore
-  storeCancelCheck -- No --> orderComplete
+  Z((End))
+
 
