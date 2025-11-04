@@ -1,50 +1,20 @@
-%% E-Commerce Application - Activity Diagram (GitHub compatible)
-
-flowchart TD
-  A((Start))
-
-  %% Registration or Login
-  A --> B{Have account}
-  B -- No --> C[Register with name, phone, email, address, username, password]
-  C --> D{Registration successful}
-  D -- Yes --> E[Login successful]
-  D -- No --> C
-
-  B -- Yes --> F[Enter username and password]
-  F --> G{Credentials valid}
-  G -- Yes --> E
-  G -- No --> F
-
-  %% Browsing and Cart
-  E --> H[Browse items list]
-  H --> I[View item details]
-  I --> J{Add to cart}
-  J -- Yes --> K[Add item to cart]
-  J -- No --> H
-  K --> L{Continue or Checkout}
-  L -- Continue --> H
-  L -- Checkout --> M[Review cart items]
-
-  %% Cancel or Payment
-  M --> N{Cancel order}
-  N -- Yes --> O[Order cancelled by customer] --> Z((End))
-  N -- No --> P{Proceed to payment}
-  P -- No --> H
-  P -- Yes --> Q[Enter card info and address]
-
-  %% Payment and Order
-  Q --> R{Payment authorized}
-  R -- No --> Q
-  R -- Yes --> S[Create order with number, items, total, address]
-  S --> T[Order confirmation sent]
-  T --> U[Order in fulfillment]
-
-  %% Cancellation or Delivery
-  U --> V{Cancel order requested}
-  V -- Customer --> W[Cancelled by customer] --> Z
-  V -- Store --> X[Cancelled by store] --> Z
-  V -- No --> Y[Order delivered and closed] --> Z
-
-  Z((End))
-
-
+flowchart TB
+    A(("Start")) --> B{"Have account?"}
+    B -- No --> C["Register"]
+    C --> D["Login"]
+    B -- Yes --> D
+    D --> E["Browse items"]
+    E --> F["View/Add to cart"]
+    F --> G{"Checkout?"}
+    G -- No --> E
+    G -- Yes --> H["Review Cart"]
+    H --> I{"Cancel?"}
+    I -- Yes --> Z(("End"))
+    I -- No --> J["Payment"]
+    J --> K{"Authorized?"}
+    K -- No --> J
+    K -- Yes --> L["Order placed"]
+    L --> M{"Cancel after order?"}
+    M -- Yes --> Z
+    M -- No --> N["Delivered"]
+    N --> Z
