@@ -1,55 +1,4 @@
 erDiagram
-
-    PC {
-        PC_ID
-    }
-
-    PERSONNEL {
-        Personnel_ID
-    }
-
-    PROBLEM_REPORT {
-        Problem_Report_ID
-        Date_Submitted
-        Description
-        Status
-    }
-
-    PROBLEM_CATEGORY {
-        Category_ID
-        Category_Name
-    }
-
-    RESOLUTION {
-        Resolution_ID
-        Diagnosis
-        Actions
-        Date_Fixed
-    }
-
-    RESOLUTION_CATEGORY {
-        Category_ID
-        Category_Name
-    }
-
-    REPAIR_PERSONNEL {
-        Repair_Personnel_ID
-        Name
-    }
-
-    REPAIR_ASSIGNMENT {
-        Assignment_ID
-    }
-
-    INTERMEDIATE_RESOLUTION {
-        Intermediate_ID
-    }
-
-    PURCHASE_ORDER {
-        PO_ID
-    }
-
-    %% Core Relationships
     PC ||--o{ PROBLEM_REPORT : has
     PERSONNEL ||--o{ PROBLEM_REPORT : submits
     PROBLEM_CATEGORY ||--o{ PROBLEM_REPORT : classifies
@@ -62,4 +11,5 @@ erDiagram
 
     RESOLUTION ||--o| INTERMEDIATE_RESOLUTION : may_have
     INTERMEDIATE_RESOLUTION ||--|| PURCHASE_ORDER : generates
+
 
