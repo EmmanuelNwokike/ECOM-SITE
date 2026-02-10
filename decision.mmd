@@ -1,14 +1,39 @@
 flowchart TD
     A[Age Group] -->|0–29| B[Ability to Pay]
-    A -->|30–55| C[Past Payment Record]
+    A -->|30–55| C[Ability to Pay]
     A -->|56+| D[Ability to Pay]
 
-    B -->|Good| E[Loan $5,000]
-    B -->|Bad| F[No Loan]
+    %% Age 0–29
+    B -->|Bad| Z[No Loan]
+    B -->|Good| E[Past Payment Record]
+    E -->|Poor| Z
+    E -->|Slow| F[Loan Type]
+    E -->|Good| F
 
-    C -->|Good| G[Loan $10,000]
-    C -->|Slow| H[Loan $7,500]
-    C -->|Poor| I[No Loan]
+    %% Age 30–55
+    C -->|Bad| Z
+    C -->|Good| G[Past Payment Record]
+    G -->|Poor| H[Loan $7,500]
+    G -->|Slow| I[Loan Type]
+    G -->|Good| J[Loan $10,000]
 
-    D -->|Good| J[Loan $7,500]
-    D -->|Bad| K[No Loan]
+    %% Age 56+
+    D -->|Bad| Z
+    D -->|Good| K[Past Payment Record]
+    K -->|Poor| Z
+    K -->|Slow| L[Loan $5,000]
+    K -->|Good| M[Loan Type]
+
+    %% Loan Type decisions
+    F -->|Necessity| L
+    F -->|Luxury| Z
+    F -->|Frivolous| Z
+
+    I -->|Necessity| H
+    I -->|Luxury| L
+    I -->|Frivolous| Z
+
+    M -->|Necessity| H
+    M -->|Luxury| L
+    M -->|Frivolous| Z
+
