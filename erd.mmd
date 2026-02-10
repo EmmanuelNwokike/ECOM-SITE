@@ -1,0 +1,105 @@
+erDiagram
+
+    PC {
+        int PC_ID PK
+        string Asset_Tag
+        string Model
+        string Location
+        string Status
+    }
+
+    PERSONNEL {
+        int Personnel_ID PK
+        string Full_Name
+        string Department
+        string Email
+        string Phone
+    }
+
+    PROBLEM_REPORT {
+        int Problem_Report_ID PK
+        datetime Date_Time_Submitted
+        string Problem_Description
+        string Priority_Level
+        string Status
+        boolean Reporter_Satisfaction_Flag
+        int PC_ID FK
+        int Personnel_ID FK
+        int Problem_Category_ID FK
+    }
+
+    PROBLEM_CATEGORY {
+        int Problem_Category_ID PK
+        string Category_Name
+        string Description
+    }
+
+    RESOLUTION {
+        int Resolution_ID PK
+        string Diagnosis
+        string Actions_Taken
+        string Approval_Status
+        datetime Date_Time_Fixed
+        float Cost
+        float Time_To_Fix
+        int Problem_Report_ID FK
+        int Resolution_Category_ID FK
+    }
+
+    RESOLUTION_CATEGORY {
+        int Resolution_Category_ID PK
+        string Category_Name
+        string Description
+    }
+
+    REPAIR_PERSONNEL {
+        int Repair_Personnel_ID PK
+        string Full_Name
+        string Skill_Set
+        string Contact_Info
+    }
+
+    REPAIR_ASSIGNMENT {
+        int Repair_Assignment_ID PK
+        string Role_Performed
+        float Hours_Worked
+        int Resolution_ID FK
+        int Repair_Personnel_ID FK
+    }
+
+    INTERMEDIATE_RESOLUTION {
+        int Intermediate_Resolution_ID PK
+        string Temporary_Action_Taken
+        string Reason_For_Delay
+        date Expected_Final_Date
+        int Resolution_ID FK
+    }
+
+    PURCHASE_ORDER {
+        int PO_ID PK
+        date PO_Date
+        string Vendor
+        string Item_Description
+        float Amount
+        string PO_Status
+        int Intermediate_Resolution_ID FK
+    }
+
+    %% Relationships
+    PC ||--o{ PROBLEM_REPORT : "has"
+
+    PERSONNEL ||--o{ PROBLEM_REPORT : "submits"
+
+    PROBLEM_CATEGORY ||--o{ PROBLEM_REPORT : "classifies"
+
+    PROBLEM_REPORT ||--o{ RESOLUTION : "has"
+
+    RESOLUTION_CATEGORY ||--o{ RESOLUTION : "categorizes"
+
+    RESOLUTION ||--o{ REPAIR_ASSIGNMENT : "uses"
+
+    REPAIR_PERSONNEL ||--o{ REPAIR_ASSIGNMENT : "assigned to"
+
+    RESOLUTION ||--o| INTERMEDIATE_RESOLUTION : "may have"
+
+    INTERMEDIATE_RESOLUTION ||--|| PURCHASE_ORDER : "generates"
