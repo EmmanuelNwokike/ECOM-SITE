@@ -1,39 +1,52 @@
 flowchart TD
-    A[Age Group] -->|0–29| B[Ability to Pay]
-    A -->|30–55| C[Ability to Pay]
-    A -->|56+| D[Ability to Pay]
+    %% Root
+    A[Age Group]
 
-    %% Age 0–29
-    B -->|Bad| Z[No Loan]
-    B -->|Good| E[Past Payment Record]
-    E -->|Poor| Z
-    E -->|Slow| F[Loan Type]
-    E -->|Good| F
+    %% Age branches
+    A -->|0–29| B1[Ability to Pay]
+    A -->|30–55| B2[Ability to Pay]
+    A -->|56+| B3[Ability to Pay]
 
-    %% Age 30–55
-    C -->|Bad| Z
-    C -->|Good| G[Past Payment Record]
-    G -->|Poor| H[Loan $7,500]
-    G -->|Slow| I[Loan Type]
-    G -->|Good| J[Loan $10,000]
+    %% ======================
+    %% AGE 0–29
+    %% ======================
+    B1 -->|Bad| N0[No Loan]
+    B1 -->|Good| C1[Past Payment Record]
 
-    %% Age 56+
-    D -->|Bad| Z
-    D -->|Good| K[Past Payment Record]
-    K -->|Poor| Z
-    K -->|Slow| L[Loan $5,000]
-    K -->|Good| M[Loan Type]
+    C1 -->|Poor| N0
+    C1 -->|Slow| D1[Loan Type]
+    C1 -->|Good| D1
 
-    %% Loan Type decisions
-    F -->|Necessity| L
-    F -->|Luxury| Z
-    F -->|Frivolous| Z
+    D1 -->|Necessity| L5[Loan $5,000]
+    D1 -->|Luxury| N0
+    D1 -->|Frivolous| N0
 
-    I -->|Necessity| H
-    I -->|Luxury| L
-    I -->|Frivolous| Z
+    %% ======================
+    %% AGE 30–55
+    %% ======================
+    B2 -->|Bad| N0
+    B2 -->|Good| C2[Past Payment Record]
 
-    M -->|Necessity| H
-    M -->|Luxury| L
-    M -->|Frivolous| Z
+    C2 -->|Poor| L7[Loan $7,500]
+    C2 -->|Slow| D2[Loan Type]
+    C2 -->|Good| L10[Loan $10,000]
+
+    D2 -->|Necessity| L7
+    D2 -->|Luxury| L5
+    D2 -->|Frivolous| N0
+
+    %% ======================
+    %% AGE 56+
+    %% ======================
+    B3 -->|Bad| N0
+    B3 -->|Good| C3[Past Payment Record]
+
+    C3 -->|Poor| N0
+    C3 -->|Slow| L5
+    C3 -->|Good| D3[Loan Type]
+
+    D3 -->|Necessity| L7
+    D3 -->|Luxury| L5
+    D3 -->|Frivolous| N0
+
 
