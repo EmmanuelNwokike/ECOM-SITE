@@ -1,0 +1,14 @@
+flowchart TD
+    A[Age Group] -->|0–29| B[Ability to Pay]
+    A -->|30–55| C[Past Payment Record]
+    A -->|56+| D[Ability to Pay]
+
+    B -->|Good| E[Loan $5,000]
+    B -->|Bad| F[No Loan]
+
+    C -->|Good| G[Loan $10,000]
+    C -->|Slow| H[Loan $7,500]
+    C -->|Poor| I[No Loan]
+
+    D -->|Good| J[Loan $7,500]
+    D -->|Bad| K[No Loan]
